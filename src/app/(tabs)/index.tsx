@@ -7,46 +7,48 @@ import { Audio } from 'expo-av'
 import ContainerPrincipal from '@/src/components/container'
 import Images from '@/src/components/images'
 import ButtonSintonize from '@/src/components/button'
+import { loadAsync } from 'expo-font'
 
 
+SplashScreen.preventAutoHideAsync()
 
 
 export default function Home(){
     const [estado, atualizaEstado] = useState(false)
     const [isLoaded, setIsLoaded] = useState(false);
-    
+
     const sound = new Audio.Sound();
-    useEffect(() => {
-      const loadAudio = async () => {
-        SplashScreen.preventAutoHideAsync();
-  
-        try {
-          await sound.loadAsync({
-            uri: 'http://stm43.conectastm.com:7790/;?type=http&nocache=271'
-          }, {shouldPlay: false});
-          setIsLoaded(true);
-          SplashScreen.hideAsync();
-          console.log('acabou')
-        } catch (error) {
-          console.error('Error loading audio:', error);
-        }
-      };
-  
-      loadAudio();
-    }, []);
+    
+    
+    async function loadSound(){
+      await sound.loadAsync({
+        uri: 'http://stm43.conectastm.com:7790'
+      }, {shouldPlay: false})
+      setIsLoaded(true)
+      SplashScreen.hideAsync()
+    }
 
     async function playSound(){
-        if(sound){
-            await sound.playAsync()
-        }
+      try{
+        await loadSound()
+        await sound.playAsync()
+      } catch (err){
+        console.log(err)
+      }
+          
     }
+
+    useEffect(()=>{
+      loadSound()
+    }, [])
+
 
     return (
         <SafeAreaView style={styles.bgColor}>
             <StatusBar style="dark"/>
             <Images />
             <ContainerPrincipal>
-                <ButtonSintonize tituloEstado={'SINTONIZAR!'} disabled={!isLoaded}onPress={playSound} />
+                <ButtonSintonize tituloEstado={'SINTONIZAR!'} disabled={!isLoaded} onPress={playSound} />
             </ContainerPrincipal>
         </SafeAreaView>
     )
