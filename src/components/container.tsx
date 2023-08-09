@@ -11,7 +11,7 @@ export default function ContainerPrincipal({children}: Props){
     return(
         <View style={styles.bgContainer}>
             <Text style={styles.textStyle}>
-                A mais ouvida e potente da região agora no seu celular! {'\n'}{'\n'} Clique no botão abaixo e embarque na programação da Rádio que Se liga em Você!
+                A mais ouvida e potente da região agora no seu celular! {'\n'}{'\n'}{'\n'} Clique no botão abaixo e embarque na programação da Rádio que Se liga em Você!
             </Text>
             {children}
         </View>
@@ -35,10 +35,10 @@ const styles = StyleSheet.create({
     textStyle:{
         textAlign: 'center',
         fontWeight: 'bold',
-        fontStyle: 'italic',
-        fontSize: 18,
+        fontStyle: 'normal',
+        fontSize: 24,
         marginHorizontal: '1%',
-        paddingHorizontal: '2%'
+        paddingHorizontal: '8%'
     },
     buttonStyle:{
         backgroundColor: '#E8D529',

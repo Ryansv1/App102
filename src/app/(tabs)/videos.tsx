@@ -1,11 +1,13 @@
-import { DarkTheme } from '@react-navigation/native'
-import { StyleSheet, Text, SafeAreaView, StatusBar} from 'react-native'
+import { StatusBar } from 'expo-status-bar'
+import { StyleSheet, Text, SafeAreaView } from 'react-native'
 
+import Images from '@/src/components/images'
 
 export default function Home(){
     return (
         <SafeAreaView style={styles.bgColor}>
-            
+            <StatusBar style="dark"/>
+            <Images></Images>
             <Text style={styles.textoBox}>Em breve vídeos de programas ao-vivo!</Text>
         </SafeAreaView>
     )
@@ -15,11 +17,10 @@ const styles = StyleSheet.create({
     bgColor:{
         flex: 1,
         backgroundColor: "#FFFFFF",
-        justifyContent: 'center',
         alignItems: 'center'
     },
     textoBox:{
         textAlign: 'center',
-        fontSize: 16
+        fontSize: 16,
     }
 })

@@ -1,14 +1,25 @@
 import React from 'react'
-import { StyleSheet, Button } from 'react-native'
+import { StyleSheet, Pressable, Text} from 'react-native'
 
 interface Props {
-    onPress: any,
+    onPress: () => void,
     tituloEstado: string,
-    disabled: boolean
+    disabled: boolean,
+    style: object
 }
 
 export default function ButtonSintonize(props: Props){
     return(
-        <Button disabled={props.disabled} title={props.tituloEstado} onPress={props.onPress}/>
+        <Pressable style={props.style} disabled={props.disabled} onPress={props.onPress}>
+            <Text style={styles.text}>{props.tituloEstado}</Text>
+        </Pressable>
     )
 }
+
+const styles = StyleSheet.create({
+    text:{
+        textAlign: 'center',
+        fontWeight: '800',
+        fontStyle: 'italic'
+    }
+})
