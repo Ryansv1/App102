@@ -1,18 +1,17 @@
 import React from 'react'
-import { StyleSheet, Pressable, Text} from 'react-native'
+import { StyleSheet, TouchableOpacity, Text} from 'react-native'
 
 interface Props {
-    onPress: () => void,
+    onPress: any,
     tituloEstado: string,
-    disabled: boolean,
     style: object
 }
 
 export default function ButtonSintonize(props: Props){
     return(
-        <Pressable style={props.style} disabled={props.disabled} onPress={props.onPress}>
+        <TouchableOpacity style={props.style} onPress={props.onPress}>
             <Text style={styles.text}>{props.tituloEstado}</Text>
-        </Pressable>
+        </TouchableOpacity>
     )
 }
 

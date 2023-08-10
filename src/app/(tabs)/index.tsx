@@ -7,63 +7,61 @@ import { Audio } from 'expo-av'
 import ContainerPrincipal from '@/src/components/container'
 import Images from '@/src/components/images'
 import ButtonSintonize from '@/src/components/button'
-import { loadAsync } from 'expo-font'
 
-
-SplashScreen.preventAutoHideAsync()
-
+const sound = new Audio.Sound();
 export default function Home(){
-    const [estado, atualizaEstado] = useState(false)
-    const [isLoaded, setIsLoaded] = useState(false);
 
-    const sound = new Audio.Sound();
-    
-    async function loadSound(){
+  const [isAudioLoaded, setIsAudioLoaded] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const titulo = isPlaying ? 'Pausar reprodução' : 'SINTONIZAR!';
+  const [tchubirau, setTchubirau] = useState(false)
+  
+
+  async function loadSound() {
+    try {
       await sound.loadAsync({
         uri: 'http://stm43.conectastm.com:7790'
-      }, {shouldPlay: false})
-      sound._onPlaybackStatusUpdate = playbackStatus =>{
-        if(!playbackStatus.isLoaded){
-          SplashScreen.preventAutoHideAsync()
-        } else {
-          SplashScreen.hideAsync()
-        }
-      }
+      });
+      setIsAudioLoaded(true);
+    } catch (error) {
+      console.error('Error loading audio:', error);
     }
+  }
 
-    async function playSound(){
-      try{
-        const loadAll = () => {
-          return new Promise((resolve) =>{
-            loadSound()
-            setIsLoaded(true)
-            resolve(setIsLoaded)
-          })
-        }
-        
-        if(estado === false){
-          await sound.playAsync()
-          atualizaEstado(!estado)
-        } if(estado === true){
-          await sound.pauseAsync()
-          atualizaEstado(!estado)
-        }
-      } catch (err){
-        console.log(err)
+  async function playSound() {
+    try {
+      if (isPlaying) {
+        await sound.pauseAsync();
+      } else {
+        await sound.playAsync();
       }
-          
+      setIsPlaying(!isPlaying);
+    } catch (error) {
+      console.error('Error playing/pausing audio:', error);
     }
- 
-    useEffect(()=>{
-      loadSound()
-    }, [])
+  }
+
+  useEffect(() => {
+    loadSound();
+    return () => {
+      sound.unloadAsync(); // Limpa o áudio quando o componente é desmontado
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log('a vei')
+    if (isAudioLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [isAudioLoaded]);
+
 
     return (
         <SafeAreaView style={styles.bgColor}>
             <StatusBar style="dark"/>
             <Images />
             <ContainerPrincipal>
-                <ButtonSintonize style={styles.button} tituloEstado={'SINTONIZAR!'} disabled={!isLoaded} onPress={playSound} />
+                <ButtonSintonize style={styles.button} tituloEstado={titulo} onPress={playSound} />
             </ContainerPrincipal>
         </SafeAreaView>
     )

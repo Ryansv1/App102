@@ -17,8 +17,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "infoPlist":{
-        "UIBackgroundModes":[
+      "infoPlist": {
+        "UIBackgroundModes": [
           "audio"
         ]
       }
@@ -27,7 +27,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ryansv1.Radio1029"
     },
     "web": {
       "bundler": "metro",
