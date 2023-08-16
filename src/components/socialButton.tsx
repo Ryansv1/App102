@@ -1,4 +1,4 @@
-import { TouchableOpacity, StyleSheet, Text} from 'react-native'
+import { TouchableOpacity, StyleSheet, Text, Platform} from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import * as Linking from 'expo-linking'
 
@@ -11,8 +11,6 @@ interface Props {
 export default function SocialButton({network, url, iconName}: Props){
     const openSocialLink = async () => {
         const supported = await Linking.canOpenURL(url);
-
-        console.log(url)
     
         if (supported) {
           await Linking.openURL(url);
@@ -38,7 +36,17 @@ const styles = StyleSheet.create({
         width: '90%',
         borderRadius: 10,
         borderWidth: 3,
-        padding: '3%'
+        ...Platform.select({
+            web:{
+                padding: '1%'
+            },
+            ios:{
+                padding: '3%'
+            },
+            android:{
+                padding: '3%'
+            }
+        })
     },
     text:{
         marginLeft: '10%',

@@ -17,8 +17,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "infoPlist": {
-        "UIBackgroundModes": [
+      "infoPlist":{
+        "UIBackgroundModes":[
           "audio"
         ]
       }
@@ -28,7 +28,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.ryansv1.Radio1029"
+      "permissions":["ACCESS_FINE_LOCATION", "INTERNET"],
+      "package":"com.radio1029amorimfm.app"
     },
     "web": {
       "bundler": "metro",
@@ -41,6 +42,11 @@
     "experiments": {
       "tsconfigPaths": true,
       "typedRoutes": true
+    },
+    "extra":{
+      "eas":{
+        "projectId": "e240483a-b2a1-4b14-8ae0-61701746b91a"
+      }
     }
   }
 }

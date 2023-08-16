@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { StyleSheet, SafeAreaView } from 'react-native'
+import { StyleSheet, SafeAreaView, Alert} from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { SplashScreen } from 'expo-router'
 import { Audio } from 'expo-av'
@@ -8,60 +8,52 @@ import ContainerPrincipal from '@/src/components/container'
 import Images from '@/src/components/images'
 import ButtonSintonize from '@/src/components/button'
 
-const sound = new Audio.Sound();
+
+const sound = new Audio.Sound
+sound.loadAsync(
+    {uri: 'http://stm43.conectastm.com:7790/.m3u8'},
+    {shouldPlay: false}
+)
+
+
 export default function Home(){
-
-  const [isAudioLoaded, setIsAudioLoaded] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const titulo = isPlaying ? 'Pausar reprodução' : 'SINTONIZAR!';
-  const [tchubirau, setTchubirau] = useState(false)
-  
-
-  async function loadSound() {
-    try {
-      await sound.loadAsync({
-        uri: 'http://stm43.conectastm.com:7790'
-      });
-      setIsAudioLoaded(true);
-    } catch (error) {
-      console.error('Error loading audio:', error);
+    const [soundIsPlaying, setSoundIsPlaying] = useState<true | false>(false)
+    const [stateTela, setStateTela] = useState<true | false>(false)
+    const [title, setTitle] = useState('SINTONIZAR!')
+    
+    sound._onPlaybackStatusUpdate = status =>{
+        if(!status.isLoaded){
+            setStateTela(true)
+        } else {
+            setStateTela(false)
+        }
     }
-  }
+    
+    sound.setOnPlaybackStatusUpdate(sound._onPlaybackStatusUpdate);
+    
 
-  async function playSound() {
-    try {
-      if (isPlaying) {
-        await sound.pauseAsync();
-      } else {
-        await sound.playAsync();
-      }
-      setIsPlaying(!isPlaying);
-    } catch (error) {
-      console.error('Error playing/pausing audio:', error);
+    async function playAudioAndVerifyStatus(){
+        try {
+            if(soundIsPlaying != true){
+                sound.playAsync()
+                setSoundIsPlaying(!soundIsPlaying)
+                setTitle('Pausar Reprodução!')
+            } else {
+                sound.pauseAsync()
+                setSoundIsPlaying(!soundIsPlaying)
+                setTitle('SINTONIZAR')
+            }
+        } catch (err: unknown){
+            Alert.alert('Erro na Reprodução', 'Código do erro:' + err)
+        }
     }
-  }
-
-  useEffect(() => {
-    loadSound();
-    return () => {
-      sound.unloadAsync(); // Limpa o áudio quando o componente é desmontado
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log('a vei')
-    if (isAudioLoaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [isAudioLoaded]);
-
 
     return (
         <SafeAreaView style={styles.bgColor}>
             <StatusBar style="dark"/>
             <Images />
             <ContainerPrincipal>
-                <ButtonSintonize style={styles.button} tituloEstado={titulo} onPress={playSound} />
+                <ButtonSintonize disabled={stateTela} isLoading={stateTela} style={styles.button} tituloEstado={title} onPress={playAudioAndVerifyStatus}/>
             </ContainerPrincipal>
         </SafeAreaView>
     )
@@ -80,5 +72,5 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 10,
         borderWidth: 3
-    }
+    },
 })

@@ -1,4 +1,4 @@
-import { Text ,View, StyleSheet, TouchableOpacity} from 'react-native'
+import { Text ,View, StyleSheet, TouchableOpacity, Platform} from 'react-native'
 import { Link } from 'expo-router'
 import { Ionicons, FontAwesome } from '@expo/vector-icons'
 
